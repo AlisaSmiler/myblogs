@@ -1,0 +1,273 @@
+一、数据结构与算法基础
+
+说一下几种常见的排序算法和分别的复杂度。
+    冒泡排序()
+    选择排序
+    希尔排序
+    快速排序
+用Java写一个冒泡排序算法
+	插入排序做了
+描述一下链式存储结构。
+	自己写一个好了 done
+如何遍历一棵二叉树？
+
+倒排一个LinkedList。
+用Java写一个递归遍历目录下面的所有文件。
+
+
+二、Java基础
+
+接口与抽象类的区别？
+	完全体的抽象类
+		Java中的异常有哪几类？分别怎么使用？
+		Java将可抛出(Throwable)的结构分为三种类型：被检查的异常(Checked Exception)，运行时异常(RuntimeException)和错误(Error)。
+
+		(01) 运行时异常
+		定义: RuntimeException及其子类都被称为运行时异常。
+		特点: Java编译器不会检查它。也就是说，当程序中可能出现这类异常时，倘若既"没有通过throws声明抛出它"，也"没有用try-catch语句捕获它"，还是会编译通过。例如，除数为零时产生的ArithmeticException异常，数组越界时产生的IndexOutOfBoundsException异常，fail-fail机制产生的ConcurrentModificationException异常等，都属于运行时异常。
+		　　虽然Java编译器不会检查运行时异常，但是我们也可以通过throws进行声明抛出，也可以通过try-catch对它进行捕获处理。
+		　　如果产生运行时异常，则需要通过修改代码来进行避免。例如，若会发生除数为零的情况，则需要通过代码避免该情况的发生！
+
+		(02) 被检查的异常
+		定义: Exception类本身，以及Exception的子类中除了"运行时异常"之外的其它子类都属于被检查异常。
+		特点: Java编译器会检查它。此类异常，要么通过throws进行声明抛出，要么通过try-catch进行捕获处理，否则不能通过编译。例如，CloneNotSupportedException就属于被检查异常。当通过clone()接口去克隆一个对象，而该对象对应的类没有实现Cloneable接口，就会抛出CloneNotSupportedException异常。
+		　　被检查异常通常都是可以恢复的。
+
+		(03) 错误
+		定义: Error类及其子类。
+		特点: 和运行时异常一样，编译器也不会对错误进行检查。
+		　　当资源不足、约束失败、或是其它程序无法继续运行的条件发生时，就产生错误。程序本身无法修复这些错误的。例如，VirtualMachineError就属于错误。
+		　　按照Java惯例，我们是不应该是实现任何新的Error子类的！
+
+		对于上面的3种结构，我们在抛出异常或错误时，到底该哪一种？《Effective Java》中给出的建议是：对于可以恢复的条件使用被检查异常，对于程序错误使用运行时异常。
+
+
+常用的集合类有哪些？比如List如何排序？
+	list set map
+	list Collections sort 加入comparetor接口的实现
+ArrayList和LinkedList内部的实现大致是怎样的？他们之间的区别和优缺点？
+内存溢出是怎么回事？请举一个例子？
+==和equals的区别？
+hashCode方法的作用？
+NIO是什么？适用于何种场景？
+HashMap实现原理，如何保证HashMap的线程安全？
+JVM内存结构，为什么需要GC？
+NIO模型，select/epoll的区别，多路复用的原理
+Java中一个字符占多少个字节，扩展再问int, long, double占多少字节
+创建一个类的实例都有哪些办法？
+final/finally/finalize的区别？
+Session/Cookie的区别？
+String/StringBuffer/StringBuilder的区别，扩展再问他们的实现？
+Servlet的生命周期？
+如何用Java分配一段连续的1G的内存空间？需要注意些什么？
+Java有自己的内存回收机制，但为什么还存在内存泄露的问题呢？
+什么是java序列化，如何实现java序列化?(写一个实例)？
+String s = new String("abc");创建了几个 String Object?
+
+
+三、JVM
+
+JVM堆的基本结构。
+JVM的垃圾算法有哪几种？CMS垃圾回收的基本流程？
+JVM有哪些常用启动参数可以调整，描述几个？
+如何查看JVM的内存使用情况？
+Java程序是否会内存溢出，内存泄露情况发生？举几个例子。
+你常用的JVM配置和调优参数都有哪些？分别什么作用？
+JVM的内存结构？
+常用的GC策略，什么时候会触发YGC，什么时候触发FGC？
+
+
+四、多线程/并发
+
+如何创建线程？如何保证线程安全？
+如何实现一个线程安全的数据结构
+如何避免死锁
+Volatile关键字的作用？
+HashMap在多线程环境下使用需要注意什么？为什么？
+Java程序中启动一个线程是用run()还是start()？
+什么是守护线程？有什么用？
+什么是死锁？如何避免
+线程和进程的差别是什么？
+Java里面的Threadlocal是怎样实现的？
+ConcurrentHashMap的实现原理是？
+sleep和wait区别
+notify和notifyAll区别
+volatile关键字的作
+ThreadLocal的作用与实现
+两个线程如何串行执行
+上下文切换是什么含义
+可以运行时kill掉一个线程吗？
+什么是条件锁、读写锁、自旋锁、可重入锁？
+线程池ThreadPoolExecutor的实现原理？
+
+
+五、Linux使用与问题分析排查
+
+使用两种命令创建一个文件？
+硬链接和软链接的区别？
+Linux常用命令有哪些？
+怎么看一个Java线程的资源耗用？
+Load过高的可能性有哪些？
+/etc/hosts文件什么做用？
+如何快速的将一个文本中所有“abc”替换为“xyz”？
+如何在log文件中搜索找出error的日志？
+发现磁盘空间不够，如何快速找出占用空间最大的文件？
+Java服务端问题排查（OOM，CPU高，Load高，类冲突）
+Java常用问题排查工具及用法（top, iostat, vmstat, sar, tcpdump, jvisualvm, jmap, jconsole）
+Thread dump文件如何分析（Runnable，锁，代码栈，操作系统线程ID关联）
+如何查看Java应用的线程信息？
+
+
+六、框架使用
+
+描述一下Hibernate的三个状态？
+Spring中Bean的生命周期。
+SpringMVC或Struts处理请求的流程。
+Spring AOP解决了什么问题？怎么实现的？
+Spring事务的传播属性是怎么回事？它会影响什么？
+Spring中BeanFactory和FactoryBean有什么区别？
+Spring框架中IOC的原理是什么？
+spring的依赖注入有哪几种方式
+struts工作流程
+用Spring如何实现一个切面？
+Spring 如何实现数据库事务？
+Hibernate对一二级缓存的使用，Lazy-Load的理解；
+mybatis如何实现批量提交？
+
+
+七、数据库相关
+
+MySQL InnoDB、Mysaim的特点？
+乐观锁和悲观锁的区别？
+数据库隔离级别是什么？有什么作用？
+MySQL主备同步的基本原理。
+select * from table t where size > 10 group by size order by size的sql语句执行顺序？
+如何优化数据库性能（索引、分库分表、批量操作、分页算法、升级硬盘SSD、业务优化、主从部署）
+SQL什么情况下不会使用索引（不包含，不等于，函数）
+一般在什么字段上建索引（过滤数据最多的字段）
+如何从一张表中查出name字段不包含“XYZ”的所有行？
+MySQL，B+索引实现，行锁实现，SQL优化
+Redis，RDB和AOF，如何做高可用、集群
+如何解决高并发减库存问题
+mysql存储引擎中索引的实现机制；
+数据库事务的几种粒度；
+行锁，表锁；乐观锁，悲观锁
+
+
+八、网络协议和网络编程
+
+TCP建立连接的过程。
+TCP断开连接的过程。
+浏览器发生302跳转背后的逻辑？
+HTTP协议的交互流程。HTTP和HTTPS的差异，SSL的交互流程？
+Rest和Http什么关系？ 大家都说Rest很轻量，你对Rest风格如何理解？
+TCP的滑动窗口协议有什么用？讲讲原理。
+HTTP协议都有哪些方法？
+交换机和路由器的区别？
+Socket交互的基本流程？
+http协议（报文结构，断点续传，多线程下载，什么是长连接）
+tcp协议（建连过程，慢启动，滑动窗口，七层模型）
+webservice协议（wsdl/soap格式，与rest协议的区别）
+NIO的好处，Netty线程模型，什么是零拷贝
+
+
+九、Redis等缓存系统/中间件/NoSQL/一致性Hash等
+
+列举一个常用的Redis客户端的并发模型。
+	SETNX乐观锁 不存在设置成功1 失败0
+
+HBase如何实现模糊查询？
+列举一个常用的消息中间件，如果消息要保序如何实现？
+如何实现一个Hashtable？你的设计如何考虑Hash冲突？如何优化？
+分布式缓存，一致性hash
+LRU算法，slab分配，如何减少内存碎片
+如何解决缓存单机热点问题
+什么是布隆过滤器，其实现原理是？ False positive指的是？
+memcache与redis的区别
+zookeeper有什么功能，选举算法如何进行
+	文章：
+		http://www.jasongj.com/zookeeper/fastleaderelection/?hmsr=toutiao.io&utm_medium=toutiao.io&utm_source=toutiao.io
+	功能：
+		配置多个实例(instance)组成一个集群，对外提供一个服务
+	选举算法：
+		3种
+			1、LeaderElection
+			2、AuthFastLeaderElection
+			3、FastLeaderElection-默认算法
+				Serverid：在配置server时，给定的服务器的标示id。
+				Zxid:服务器在运行时产生的数据id，zxid越大，表示数据越新。
+				Epoch：选举的轮数，即逻辑时钟。
+				Server状态：LOOKING,FOLLOWING,OBSERVING,LEADING
+				总结：
+				一、首先开始选举阶段，每个Server读取自身的zxid。
+				二、发送投票信息
+				   a、首先，每个Server第一轮都会投票给自己。
+				   b、投票信息包含 ：所选举leader的Serverid，Zxid，Epoch。Epoch会随着选举轮数的增加而递增。
+				三、接收投票信息
+				1、如果所接收数据中服务器的状态是否处于选举阶段(LOOKING 状态)。
+					首先，判断逻辑时钟值：
+					a）如果发送过来的逻辑时钟Epoch大于目前的逻辑时钟。首先，更新本逻辑时钟Epoch，同时清空本轮逻辑时钟收集到的来自其他server的选举数据。然后，判断是否需要更新当前自己的选举leader Serverid。判断规则rules judging：保存的zxid最大值和leader Serverid来进行判断的。先看数据zxid,数据zxid大者胜出;其次再判断leader Serverid,leader Serverid大者胜出；然后再将自身最新的选举结果(也就是上面提到的三种数据（leader Serverid，Zxid，Epoch）广播给其他server)
+					b）如果发送过来的逻辑时钟Epoch小于目前的逻辑时钟。说明对方server在一个相对较早的Epoch中，这里只需要将本机的三种数据（leader Serverid，Zxid，Epoch）发送过去就行。
+					c）如果发送过来的逻辑时钟Epoch等于目前的逻辑时钟。再根据上述判断规则rules judging来选举leader ，然后再将自身最新的选举结果(也就是上面提到的三种数据（leader  Serverid，Zxid，Epoch）广播给其他server)。
+					其次，判断服务器是不是已经收集到了所有服务器的选举状态：若是，根据选举结果设置自己的角色(FOLLOWING还是LEADER)，退出选举过程就是了。
+					最后，若没有收到没有收集到所有服务器的选举状态：也可以判断一下根据以上过程之后最新的选举leader是不是得到了超过半数以上服务器的支持,如果是,那么尝试在200ms内接收一下数据,如果没有新的数据到来,说明大家都已经默认了这个结果,同样也设置角色退出选举过程。
+				2、 如果所接收服务器不在选举状态，也就是在FOLLOWING或者LEADING状态。
+					a)逻辑时钟Epoch等于目前的逻辑时钟，将该数据保存到recvset。此时Server已经处于LEADING状态，说明此时这个server已经投票选出结果。若此时这个接收服务器宣称自己是leader, 那么将判断是不是有半数以上的服务器选举它，如果是则设置选举状态退出选举过程。
+					b) 否则这是一条与当前逻辑时钟不符合的消息，那么说明在另一个选举过程中已经有了选举结果，于是将该选举结果加入到outofelection集合中，再根据outofelection来判断是否可以结束选举,如果可以也是保存逻辑时钟，设置选举状态，退出选举过程。
+
+map/reduce过程，如何用map/reduce实现两个数据源的联合统计
+
+
+十、设计模式与重构
+
+你能举例几个常见的设计模式
+	单例
+		饿汉模式
+			Class A {
+					private A{}
+
+					private static A a = null;
+
+					public static A getInstance(){
+						if (a == null) {
+							a = new A();
+						}
+						return a;
+					}
+			}
+
+		懒汉模式
+			Class A {
+					private A{}
+
+					private static A a = new A();
+
+					public static A getInstance(){
+						return a;
+					}
+			}
+		经典模式
+			Class A {
+					private A{}
+
+					public static A getInstance(){
+						return B.a;
+					}
+
+					private class B{
+						public static A a = new A();
+					}
+			}
+
+	工厂
+	代理/装饰器
+	观察者模式
+	责任链模式
+
+你在设计一个工厂的包的时候会遵循哪些原则？
+你能列举一个使用了Visitor/Decorator模式的开源项目/库吗？
+你在编码时最常用的设计模式有哪些？在什么场景下用？
+如何实现一个单例？
+代理模式（动态代理）
+单例模式（懒汉模式，恶汉模式，并发初始化如何解决，volatile与lock的使用）
+JDK源码里面都有些什么让你印象深刻的设计模式使用，举例看看？
