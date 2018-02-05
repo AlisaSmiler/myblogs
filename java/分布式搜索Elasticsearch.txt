@@ -1,0 +1,74 @@
+
+拉官方镜像
+root@alisa-virtual-machine:~# docker pull elasticsearch
+
+运行镜像
+docker run -d --name=esNode1 -p 9200:9200 -p 9300:9300 elasticsearch:2.3 -Des.network.publish_host="192.168.0.218"
+
+root@alisa-virtual-machine:~# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                                            NAMES
+b7fd765f1221        elasticsearch:2.3   "/docker-entrypoin..."   About a minute ago   Up About a minute   0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp   esNode1
+698fb657bdc5        7066b222ca43        "catalina.sh run"        About an hour ago    Up About an hour    0.0.0.0:8080->8080/tcp                           zen_cori
+
+
+docker logs -f b7fd765f1221
+
+
+http://192.168.0.218:9200/
+
+
+http://192.168.0.218:9200/_plugin/head/
+
+
+curl -XGET http://192.168.0.218:9200/_cluster/health?pretty
+
+
+增加
+curl -XPUT 'http://192.168.0.218:9200/twitter/tweet/1' -d '{
+    "user" : "kimchy",
+    "post_date" : "2009-11-15T14:12:12",
+    "message" : "trying out Elastic Search"
+}'
+
+
+option
+    curl -XPUT 'http://192.168.0.218:9200/twitter/tweet/1' -d '{    "user" : "kimchy",    "post_date" : "2009-11-15T14:12:12",    "message" : "trying out Elastic Search"}'
+
+查询
+
+    curl -XGET 'http://192.168.0.218:9200/twitter/tweet/1'
+
+        {
+            _index: "twitter",
+            _type: "tweet",
+            _id: "1",
+            _version: 1,
+            found: true,
+            _source: {
+            user: "kimchy",
+            post_date: "2009-11-15T14:12:12",
+            message: "trying out Elastic Search"
+            }
+        }
+
+高级查询
+    curl -XGET 'http://192.168.0.218:9200/twitter/tweet/1?fields=message,user&pretty=true'
+        {
+          "_index" : "twitter",
+          "_type" : "tweet",
+          "_id" : "1",
+          "_version" : 1,
+          "found" : true,
+          "fields" : {
+            "message" : [ "trying out Elastic Search" ],
+            "user" : [ "kimchy" ]
+          }
+        }
+
+求交集
+    SkipList 作为求交集，可以选择性的跳过一些点
+    bitmap 桶排序的原理
+
+    Roaring bitmaps 对于求商取余，使得结果可以在可控的状态
+
+    联合索引，用跳表的方式
