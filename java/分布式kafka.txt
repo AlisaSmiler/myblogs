@@ -1,0 +1,91 @@
+href: https://www.cnblogs.com/wangdaijun/p/7169422.html
+
+安装
+# docker pull wurstmeister/zookeeper
+# docker pull wurstmeister/kafka
+
+# 运行
+# docker run -d --name zookeeper -p 2181 -t wurstmeister/zookeeper
+5e7d9b9a7abfff67f6da5275d984593a3fc9c1624396030b42c62bce948ab734
+
+root@alisa-virtual-machine:~# docker ps
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS              PORTS                                                 NAMES
+e116df892912        wurstmeister/zookeeper   "/bin/sh -c '/usr/..."   3 seconds ago       Up 2 seconds        22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:32769->2181/tcp   zookeeper
+b7fd765f1221        elasticsearch:2.3        "/docker-entrypoin..."   2 hours ago         Up 2 hours          0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp        esNode1
+698fb657bdc5        7066b222ca43             "catalina.sh run"        3 hours ago         Up 3 hours          0.0.0.0:8080->8080/tcp                                zen_cori
+
+
+### -d 后台运行容器，并返回容器id
+### --name 为容器指定一个名称
+-p 开放端口，左宿主机端口右容器端口
+-t 为容器重新分配一个伪输入终端，通常与 -i 同时使用
+
+# docker run --name kafka -e HOST_IP=localhost -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_BROKER_ID=1 -e ZK=zk -p 9092 --link zookeeper:zk -t wurstmeister/kafka  
+
+[2018-02-05 10:28:24,835] INFO [TransactionCoordinator id=1] Starting up. (kafka.coordinator.transaction.TransactionCoordinator)
+[2018-02-05 10:28:24,842] INFO [TransactionCoordinator id=1] Startup complete. (kafka.coordinator.transaction.TransactionCoordinator)
+[2018-02-05 10:28:24,848] INFO [Transaction Marker Channel Manager 1]: Starting (kafka.coordinator.transaction.TransactionMarkerChannelManager)
+[2018-02-05 10:28:24,986] INFO Creating /brokers/ids/1 (is it secure? false) (kafka.utils.ZKCheckedEphemeral)
+[2018-02-05 10:28:24,997] INFO Result of znode creation is: OK (kafka.utils.ZKCheckedEphemeral)
+[2018-02-05 10:28:25,005] INFO Registered broker 1 at path /brokers/ids/1 with addresses: EndPoint(94720d5312de,9092,ListenerName(PLAINTEXT),PLAINTEXT) (kafka.utils.ZkUtils)
+[2018-02-05 10:28:25,008] WARN No meta.properties file under dir /kafka/kafka-logs-94720d5312de/meta.properties (kafka.server.BrokerMetadataCheckpoint)
+[2018-02-05 10:28:25,135] INFO Kafka version : 1.0.0 (org.apache.kafka.common.utils.AppInfoParser)
+[2018-02-05 10:28:25,135] INFO Kafka commitId : aaa7af6d4a11b29d (org.apache.kafka.common.utils.AppInfoParser)
+[2018-02-05 10:28:25,137] INFO [KafkaServer id=1] started (kafka.server.KafkaServer)
+
+
+# 可以看到容器已经启动
+
+
+进入容器内部开始查看消息
+    docker exec -it ${CONTAINER ID} /bin/bash 
+    
+    docker exec -it 94720d5312de /bin/bash 
+
+1. 创建一个主题
+    # bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic mykafka
+
+    结果： Created topic "mykafka".
+    日志： 
+    [2018-02-06 02:00:32,128] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions mykafka-0 (kafka.server.ReplicaFetcherManager)
+    [2018-02-06 02:00:32,382] INFO Loading producer state from offset 0 for partition mykafka-0 with message format version 2 (kafka.log.Log)
+    [2018-02-06 02:00:32,401] INFO Completed load of log mykafka-0 with 1 log segments, log start offset 0 and log end offset 0 in 124 ms (kafka.log.Log)
+    [2018-02-06 02:00:32,404] INFO Created log for partition [mykafka,0] in /kafka/kafka-logs-94720d5312de with properties {compression.type -> producer, message.format.version -> 1.0-IV0, file.delete.delay.ms -> 60000, max.message.bytes -> 1000012, min.compaction.lag.ms -> 0, message.timestamp.type -> CreateTime, min.insync.replicas -> 1, segment.jitter.ms -> 0, preallocate -> false, min.cleanable.dirty.ratio -> 0.5, index.interval.bytes -> 4096, unclean.leader.election.enable -> false, retention.bytes -> -1, delete.retention.ms -> 86400000, cleanup.policy -> [delete], flush.ms -> 9223372036854775807, segment.ms -> 604800000, segment.bytes -> 1073741824, retention.ms -> 604800000, message.timestamp.difference.max.ms -> 9223372036854775807, segment.index.bytes -> 10485760, flush.messages -> 9223372036854775807}. (kafka.log.LogManager)
+    [2018-02-06 02:00:32,406] INFO [Partition mykafka-0 broker=1] No checkpointed highwatermark is found for partition mykafka-0 (kafka.cluster.Partition)
+    [2018-02-06 02:00:32,413] INFO Replica loaded for partition mykafka-0 with initial high watermark 0 (kafka.cluster.Replica)
+    [2018-02-06 02:00:32,420] INFO [Partition mykafka-0 broker=1] mykafka-0 starts at Leader Epoch 0 from offset 0. Previous Leader Epoch was: -1 (kafka.cluster.Partition)
+    [2018-02-06 02:01:43,936] INFO [GroupMetadataManager brokerId=1] Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.group.GroupMetadataManager)
+2. 运行一个生产者，将消息发送到指定主题上
+    # bin/kafka-console-producer.sh --broker-list localhost:9092 --topic mykafka
+
+3. 运行消费者，指定同样的主题
+    # bin/kafka-console-consumer.sh --zookeeper zookeeper:2181 --topic mykafka --from-beginning
+
+    这时生产者输入信息可以在消费者中看到
+        bash-4.3# bin/kafka-console-producer.sh --broker-list localhost:9092 --topic mykafka
+        >sdf
+        >woshh^H
+        >jingjing
+        >my g^H^[[3~
+        >my husband is xiaochuangf^H^H
+        >my husband is sichjuanfu
+        >xiaochuanfu
+        >hejing
+        >coupon^[[D
+        >
+
+
+        LICENSE  NOTICE  bin  config  libs  logs  site-docs
+        bash-4.3#  bin/kafka-console-consumer.sh --zookeeper zookeeper:2181 --topic mykafka --from-beginning
+        Using the ConsoleConsumer with old consumer is deprecated and will be removed in a future major release. Consider using the new consumer by passing [bootstrap-server] instead of [zookeeper].
+        sdf
+        woshh
+        jingjing
+        my g
+        my husband is xiaochuangf
+        my husband is sichjuanfu
+        xiaochuanfu
+        hejing
+        coupon
+
+高级特性，原理
