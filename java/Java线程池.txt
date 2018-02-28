@@ -1,0 +1,36 @@
+线程池
+    缓存技术
+    对多个同类对象集合起来并且高效的管理对外提供服务的对象--》池
+    线程池：
+
+免费作图 ProcessOn
+
+线程状态
+
+    shutdown--线程池中的线程如果是这种状态，代表不接收新任务，之前阻塞队列中的任务，它继续执行
+    run -- 接收新任务，之前阻塞队列中的任务，也执行
+    stop-- 停止状态 不接收新任务，也不处理老任务
+    tidying -- 清理战场状态，有效线程数为0，代表所有任务都停止，并回收
+    teminated -- 调用teminated() 终止状态,全部终止
+
+
+public class ThreadPoolExecutor
+     * RUNNING -> SHUTDOWN
+     *    On invocation of shutdown(), perhaps implicitly in finalize()
+     * (RUNNING or SHUTDOWN) -> STOP
+     *    On invocation of shutdownNow()
+     * SHUTDOWN -> TIDYING
+     *    When both queue and pool are empty
+     * STOP -> TIDYING
+     *    When pool is empty
+     * TIDYING -> TERMINATED
+     *    When the terminated() hook method has completed
+     *
+
+corePoolSize
+    等有任务进来，再创建，观察者模式(变主动为被动)，有任务进来，再去处理
+
+生产者消费者模型
+
+资源和执行 分开
+
