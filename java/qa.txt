@@ -146,7 +146,99 @@ Thread dump文件如何分析（Runnable，锁，代码栈，操作系统线程I
 
 描述一下Hibernate的三个状态？
 Spring中Bean的生命周期。
+	spring模板方法模式
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+    <!-- 配置数据库相关参数 -->
+    <!-- 扫描service包下所有的类型 -->
+    <context:component-scan base-package="org.seckill.alisa"/>
+    <bean id="car"
+          class="org.seckill.alisa.CarFactoryBean">
+        <property name="carInfo" value="本田,111,222"/>
+    </bean>
+
+    <bean id="initAndDestroySeqBean" class="org.seckill.alisa.InitAndDestroySeqBean"
+          init-method="initMethod" destroy-method="destroyMethod"
+    ></bean>
+</beans>
+
+
+public class InitAndDestroySeqBean implements InitializingBean, DisposableBean {  
+    public InitAndDestroySeqBean() {  
+        System.out.println("执行InitAndDestroySeqBean: 构造方法");  
+    }  
+  
+    @PostConstruct  
+    public void postConstruct() {  
+        System.out.println("执行InitAndDestroySeqBean: postConstruct");  
+    }  
+  
+    @Override  
+    public void afterPropertiesSet() throws Exception {  
+        System.out.println("执行InitAndDestroySeqBean: afterPropertiesSet");  
+    }  
+  
+    public void initMethod() {  
+        System.out.println("执行InitAndDestroySeqBean: init-method");  
+    }  
+  
+    @PreDestroy  
+    public void preDestroy() {  
+        System.out.println("执行InitAndDestroySeqBean: preDestroy");  
+    }  
+  
+    @Override  
+    public void destroy() throws Exception {  
+        System.out.println("执行InitAndDestroySeqBean: destroy");  
+    }  
+  
+    public void destroyMethod() {  
+        System.out.println("执行InitAndDestroySeqBean: destroy-method");  
+    }  
+  
+    public static void main(String[] args) {  
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(  
+                "classpath:applicationContext.xml");  
+        context.close();  
+    }  
+} 
+
+执行InitAndDestroySeqBean: 构造方法  
+执行InitAndDestroySeqBean: postConstruct  
+执行InitAndDestroySeqBean: afterPropertiesSet  
+执行InitAndDestroySeqBean: init-method  
+执行InitAndDestroySeqBean: preDestroy  
+执行InitAndDestroySeqBean: destroy  
+执行InitAndDestroySeqBean: destroy-method 
+
+初始化顺序：  
+Constructor > @PostConstruct >InitializingBean > init-method  
+销毁的顺序如下：  
+@PreDestroy > DisposableBean > destroy-method  
+
+
+
 SpringMVC或Struts处理请求的流程。
+	SpringMVC核心处理流程：
+
+	1、DispatcherServlet前端控制器接收发过来的请求，交给HandlerMapping处理器映射器
+
+	2、HandlerMapping处理器映射器，根据请求路径找到相应的HandlerAdapter处理器适配器（处理器适配器就是那些拦截器或Controller）
+
+	3、HandlerAdapter处理器适配器，处理一些功能请求，返回一个ModelAndView对象（包括模型数据、逻辑视图名）
+
+	4、ViewResolver视图解析器，先根据ModelAndView中设置的View解析具体视图
+
+	5、然后再将Model模型中的数据渲染到View上
+
+	这些过程都是以DispatcherServlet为中轴线进行的。
+
+
 Spring AOP解决了什么问题？怎么实现的？
 Spring事务的传播属性是怎么回事？它会影响什么？
 	如果ServiceA  ServiceB 查看有没有事务，如果有，那么就进入原来的事务里头，如果没有自己建立一个 -- 》 影响回滚数据程度 

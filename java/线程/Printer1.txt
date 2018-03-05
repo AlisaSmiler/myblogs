@@ -1,0 +1,80 @@
+package lowlevel.althom.intr.threadscorp;
+
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+/**
+ * 两个线程交替打印数字
+ */
+public class Printer1 {
+    //可重入锁
+    private final ReentrantLock lock = new ReentrantLock();
+    //Condition信号1 奇数
+    private final Condition signal = lock.newCondition();
+
+    private final int maxValue = 100;
+    private int count = 0;
+
+    private int flag = 0;
+
+    public void countMethod() {
+        Thread t1 = new Thread("Printer1 - ") {
+            public void run() {
+                final long beginTime = System.currentTimeMillis();
+
+                while (count < maxValue - 1) {
+                    lock.lock();
+                    try {
+                        while (flag == 1) {
+                            signal.await();
+                        }
+                        count++;
+                        System.out.println(Thread.currentThread().getName() + count);
+                        flag = 1;
+                        signal.signal();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+                final long spendTime = System.currentTimeMillis() - beginTime;
+                System.out.println("Thread1 总共耗时:" + spendTime);
+            }
+        };
+        Thread t2 = new Thread("Printer2 - ") {
+            public void run() {
+                final long beginTime = System.currentTimeMillis();
+
+                while (count < maxValue - 1) {
+                    lock.lock();
+                    try {
+                        while (flag == 0) {
+                            signal.await();
+                        }
+                        count++;
+                        System.out.println(Thread.currentThread().getName() + count);
+                        flag = 0;
+                        signal.signal();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+                final long spendTime = System.currentTimeMillis() - beginTime;
+                System.out.println("Thread2 总共耗时:" + spendTime);
+            }
+        };
+        //线程t1启动
+        t1.start();
+
+        //线程t2启动
+        t2.start();
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        new Printer1().countMethod();
+
+    }
+}

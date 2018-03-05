@@ -1,0 +1,62 @@
+package lowlevel.althom.intr.threadscorp;
+
+public class Printer2 {
+    private static int flag = 1;
+
+    public static void main(String[] args) {
+        Object lock = new Object();
+
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final long beginTime = System.currentTimeMillis();
+
+                for (int i = 1; i <= 100; i = i + 2) {
+                    synchronized (lock) {
+                        while (flag != 1) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println("Printer1 - " + i);
+                        flag = 2;
+                        lock.notify();
+                    }
+                }
+
+                final long spendTime = System.currentTimeMillis() - beginTime;
+                System.out.println("Thread1 总共耗时:" + spendTime);
+            }
+        }, "Printer1");
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final long beginTime = System.currentTimeMillis();
+
+                for (int i = 2; i <= 100; i = i + 2) {
+                    synchronized (lock) {
+                        while (flag != 2) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println("Printer2 - " + i);
+                        flag = 1;
+                        lock.notify();
+                    }
+                }
+
+                final long spendTime = System.currentTimeMillis() - beginTime;
+                System.out.println("Thread2 总共耗时:" + spendTime);
+            }
+        }, "Printer2");
+
+        thread1.start();
+        thread2.start();
+    }
+}
