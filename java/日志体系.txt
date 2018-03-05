@@ -15,7 +15,7 @@ slf4j 桥接包 具体包 适配器模式
     1、各个服务将日志写入自己机器的日志文件中
     2、dapper守护进程进行拉取，将数据读到dapper收集器里
     3、dapper收集器将结果写入bigtable中，一次跟踪被记录为一行
-    
+
 
 springcloud docker 玩
 
@@ -29,3 +29,22 @@ docker  images
 docker ps
 
 我们可以利用ELK对应用程序日志进行多种规模伸缩与分发处理，但这里就不讲太多了。感兴趣的朋友可以查看Logz.io博客上的Logstash教程，其中提到了多项相关使用技巧。另外，我们也可以使用Logz.io等企业服务处理日志基础设施的设置与维护工作，从而确保自己的微服务体系采用最理想的日志记录实践方案。
+
+
+本章概要
+1、微服务工程改造；
+2、启动ELK相关组件；
+3、日志采集输出验证； http://blog.csdn.net/lijun880312/article/details/78864024
+
+
+开源实时日志分析ELK平台能够完美的解决我们上述的问题，ELK由ElasticSearch、Logstash和Kiabana三个开源工具组成。官方网站：https://www.elastic.co/products
+
+
+一般的，一个分布式服务跟踪系统，主要有三部分：数据收集、数据存储和数据展示
+
+Spring Cloud 是基于 Java 的分布式服务平台，提供一系列的分布式服务所需的中间件。其中，用于分布式服务跟踪的模块是 Spring Cloud Sleuth。
+
+
+Eureka-Server：https://github.com/yejingtao/forblog/tree/master/demo-eureka-register
+ELK-Trace1：https://github.com/yejingtao/forblog/tree/master/demo-elk-trace1
+ELK-Trace2：https://github.com/yejingtao/forblog/tree/master/demo-elk-trace2
