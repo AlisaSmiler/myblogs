@@ -33,4 +33,24 @@ corePoolSize
 生产者消费者模型
 
 资源和执行 分开
-
+    {
+        int c = ctl.get();
+        // 工作线程数小于核心线程数,增加worker数量
+        if (workerCountOf(c) < corePoolSize) {
+            if (addWorker(command, true))
+                return;
+            c = ctl.get();
+        }
+        // 线程池在运行状态中，并且工作队列中可以加入新的任务
+        if (isRunning(c) && workQueue.offer(command)) {
+            int recheck = ctl.get();
+            if (! isRunning(recheck) && remove(command))
+                reject(command);
+            else if (workerCountOf(recheck) == 0)
+                addWorker(null, false);
+        }
+        // 没有在运行的线程或者工作队列中不能加入新的任务 -->增加工作线程数
+        else if (!addWorker(command, false))
+            // 不能增加worker数量了，就执行拒绝策略
+            reject(command);
+    }
