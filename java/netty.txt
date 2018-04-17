@@ -1,0 +1,13 @@
+类AbstractBootstrap.java中 用到了jdk exception IllegalStateException  
+
+    public B validate() {
+        if (group == null) {
+            throw new IllegalStateException("group not set");
+        }
+        if (channelFactory == null) {
+            throw new IllegalStateException("channel or channelFactory not set");
+        }
+        return self();
+    }
+
+    public class IllegalStateException extends RuntimeException 
